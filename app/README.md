@@ -1,6 +1,6 @@
 # openweathermap-flutter
 
-'This a [Flutter](https://flutter.dev/docs/get-started/install)  project created by [Slidy](https://pub.dev/packages/slidy)'
+This a [Flutter](https://flutter.dev/docs/get-started/install)  project created by [Slidy](https://pub.dev/packages/slidy)
 
 Weather, everybody wants to know how it is going to be during the week. Will it be rainy, windy, or sunny? Luckily for us, in the information age, there are open APIs to retrieve information about it.
 
@@ -39,11 +39,11 @@ This application is built using Flutter. The latest version is recommended.
 1. To install or update all dependencies on the project, run:
     
     ```
-    flutter packages get
+    $ flutter packages get
     ```
 
 1. Generate all necessary codes with MobX using:
 
     ```
-    flutter packages pub run build_runner build
+    $ flutter packages pub run build_runner build
     ```
