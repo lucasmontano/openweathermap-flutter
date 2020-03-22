@@ -9,6 +9,7 @@ class AppAnimation {
     "clouds_day": Lottie.asset("assets/weather/clouds_day.json"),
     "clouds_night": Lottie.asset("assets/weather/clouds_night.json"),
     "drizzle_day": Lottie.asset("assets/weather/drizzle_day.json"),
+    "drizzle_night": Lottie.asset("assets/weather/drizzle_night.json"),
     "thunderstorm_day": Lottie.asset("assets/weather/rain_thunderstorm.json"),
     "thunderstorm_night": Lottie.asset("assets/weather/rain_thunderstorm.json"),
     "rain_day": Lottie.asset("assets/weather/rain_thunderstorm.json"),
