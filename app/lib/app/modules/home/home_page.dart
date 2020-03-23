@@ -42,7 +42,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text("ABRIR"),
+        child: Text("OPEN"),
         onPressed: () {
           Get.bottomSheet(
             builder: (_) {
