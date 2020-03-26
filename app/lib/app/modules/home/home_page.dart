@@ -25,13 +25,6 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     zoom: 14.4746,
   );
 
-  static final CameraPosition _kLake = CameraPosition(
-    bearing: 192.8334901395799,
-    target: LatLng(37.43296265331129, -122.08832357078792),
-    tilt: 59.440717697143555,
-    zoom: 19.151926040649414,
-  );
-
   @override
   Widget build(BuildContext context) {
     final devicePixelRatio =
@@ -50,9 +43,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                   ),
                 );
                 controller.setLatLng(latLng);
-                controller.markers.clear();
+                controller.markers.length > 1
+                    ? controller.markers.removeAt(0)
+                    : null;
               },
               onCameraIdle: () {
+                controller.latLng == null ? null : controller.getWeatherInfo();
                 controller.addMarkes(
                   controller.latLng.longitude.toString(),
                   controller.latLng,

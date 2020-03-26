@@ -75,8 +75,8 @@ class Clouds {
 }
 
 class Coord {
-    int lon;
-    int lat;
+    double lon;
+    double lat;
 
     Coord({
         this.lon,
@@ -150,7 +150,7 @@ class Sys {
     factory Sys.fromJson(Map<String, dynamic> json) => Sys(
         type: json["type"],
         id: json["id"],
-        message: json["message"].toDouble(),
+        message: json["message"],
         country: json["country"],
         sunrise: json["sunrise"],
         sunset: json["sunset"],
