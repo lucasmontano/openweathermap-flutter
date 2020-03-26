@@ -43,6 +43,30 @@ mixin _$HomeController on _HomeControllerBase, Store {
     }, _$latLngAtom, name: '${_$latLngAtom.name}_set');
   }
 
+  final _$weatherModelAtom = Atom(name: '_HomeControllerBase.weatherModel');
+
+  @override
+  WeatherModel get weatherModel {
+    _$weatherModelAtom.context.enforceReadPolicy(_$weatherModelAtom);
+    _$weatherModelAtom.reportObserved();
+    return super.weatherModel;
+  }
+
+  @override
+  set weatherModel(WeatherModel value) {
+    _$weatherModelAtom.context.conditionallyRunInAction(() {
+      super.weatherModel = value;
+      _$weatherModelAtom.reportChanged();
+    }, _$weatherModelAtom, name: '${_$weatherModelAtom.name}_set');
+  }
+
+  final _$getWeatherInfoAsyncAction = AsyncAction('getWeatherInfo');
+
+  @override
+  Future<dynamic> getWeatherInfo() {
+    return _$getWeatherInfoAsyncAction.run(() => super.getWeatherInfo());
+  }
+
   final _$_HomeControllerBaseActionController =
       ActionController(name: '_HomeControllerBase');
 
@@ -69,7 +93,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
   @override
   String toString() {
     final string =
-        'markers: ${markers.toString()},latLng: ${latLng.toString()}';
+        'markers: ${markers.toString()},latLng: ${latLng.toString()},weatherModel: ${weatherModel.toString()}';
     return '{$string}';
   }
 }
