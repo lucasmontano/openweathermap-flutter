@@ -18,11 +18,17 @@ environment:
 
 dependencies:
   dio: ^3.0.9
-  flutter_mobx: ^1.0.1
-  mobx: ^1.0.2+2
+  google_maps_flutter: ^0.5.25
+  search_map_place: 
+  http: ^0.12.0+4
+  
+   
+  
+  
   flutter_modular: ^0.5.6
   flutter:
     sdk: flutter
+   
 
 
   # The following adds the Cupertino Icons font to your application.
