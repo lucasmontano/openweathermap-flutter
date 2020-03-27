@@ -112,8 +112,8 @@ class Main {
     });
 
     factory Main.fromJson(Map<String, dynamic> json) => Main(
-        temp: json["temp"].toDouble(),
-        feelsLike: json["feels_like"].toDouble(),
+        temp: json["temp"],
+        feelsLike: json["feels_like"],
         tempMin: json["temp_min"].toDouble(),
         tempMax: json["temp_max"].toDouble(),
         pressure: json["pressure"],
@@ -196,7 +196,7 @@ class Weather {
 
 class Wind {
     double speed;
-    double deg;
+    int deg;
 
     Wind({
         this.speed,
@@ -204,8 +204,8 @@ class Wind {
     });
 
     factory Wind.fromJson(Map<String, dynamic> json) => Wind(
-        speed: json["speed"].toDouble(),
-        deg: json["deg"].toDouble(),
+        speed: json["speed"],
+        deg: json["deg"],
     );
 
     Map<String, dynamic> toJson() => {

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:app_client/app/modules/home/widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -22,11 +22,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+    zoom: 10,
   );
 
   @override
   Widget build(BuildContext context) {
+    controller.setContext(context);
     final devicePixelRatio =
         Platform.isAndroid ? MediaQuery.of(context).devicePixelRatio : 1.0;
 
@@ -43,15 +44,20 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                   ),
                 );
                 controller.setLatLng(latLng);
-                controller.markers.length > 1
+              },
+              onCameraIdle: () async {
+                if (controller.latLng == null) {
+                  return;
+                }
+                await controller.getWeatherInfo();
+                controller.markers.length >= 1
                     ? controller.markers.removeAt(0)
                     : null;
-              },
-              onCameraIdle: () {
-                controller.latLng == null ? null : controller.getWeatherInfo();
+
                 controller.addMarkes(
                   controller.latLng.longitude.toString(),
                   controller.latLng,
+                  WeatherInfoBottomSheetWidget(controller.weatherModel),
                 );
               },
               markers: Set.from(controller.markers),
