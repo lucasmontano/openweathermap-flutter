@@ -71,11 +71,6 @@ abstract class _HomeControllerBase with Store {
   }
 
   @action
-  removeMarkes() {
-    markers.removeAt(0);
-  }
-
-  @action
   saveMarker(String _markerId, LatLng _latLng, Widget _bottomSheet) {
     markersSave.add(
       Marker(
@@ -99,10 +94,6 @@ abstract class _HomeControllerBase with Store {
         ),
       ),
     );
-    markersSave.map((marker) {
-      markers.add(marker);
-      print(marker);
-    });
   }
 
   @action
@@ -112,7 +103,7 @@ abstract class _HomeControllerBase with Store {
   }
 
   @action
-  removeMarkersSave(String a) {
-    markersSave.removeWhere((marker) => marker.markerId == MarkerId(a));
+  removeMarkersSave(String _markerId) {
+    markersSave.removeWhere((marker) => marker.markerId == MarkerId(_markerId));
   }
 }

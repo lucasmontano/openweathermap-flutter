@@ -189,16 +189,6 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
-  dynamic removeMarkes() {
-    final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
-    try {
-      return super.removeMarkes();
-    } finally {
-      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic saveMarker(String _markerId, LatLng _latLng, Widget _bottomSheet) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
     try {
@@ -209,10 +199,10 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
-  dynamic removeMarkersSave(String a) {
+  dynamic removeMarkersSave(String _markerId) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
     try {
-      return super.removeMarkersSave(a);
+      return super.removeMarkersSave(_markerId);
     } finally {
       _$_HomeControllerBaseActionController.endAction(_$actionInfo);
     }

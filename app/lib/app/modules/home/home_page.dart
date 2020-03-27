@@ -47,8 +47,6 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       ),
                     );
                     controller.setLatLng(latLng);
-                    
-                    
                   },
                   onCameraIdle: () async {
                     if (controller.latLng == null) {
@@ -65,58 +63,57 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       WeatherInfoBottomSheetWidget(controller.weatherModel),
                     );
                   },
-                  
                   markers: Set.from(controller.isExploring
                       ? controller.markers
                       : controller.markersSave),
                   mapType: MapType.normal,
                   initialCameraPosition: _kGooglePlex,
-                  
                   onMapCreated: (GoogleMapController controller) async {
                     _completer.complete(controller);
                     _googleMapController = await _completer.future;
-
-                    
-         
                   },
                 );
               },
             ),
           ),
-          Observer(builder: (_){
-           return  controller.isExploring ?  Center(
-            child: Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.black,
-                  width: 2,
-                ),
-              ),
-              child: Center(
-                child: Container(
-                  width: 5,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ) : Container();
-          },),
+          Observer(
+            builder: (_) {
+              return controller.isExploring
+                  ? Center(
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 2,
+                          ),
+                        ),
+                        child: Center(
+                          child: Container(
+                            width: 5,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 2,
+                              ),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container();
+            },
+          ),
         ],
       ),
       floatingActionButton: Observer(
