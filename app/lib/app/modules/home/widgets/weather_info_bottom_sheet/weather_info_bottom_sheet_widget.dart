@@ -1,8 +1,14 @@
+import 'dart:math';
+
+import 'package:app_client/app/modules/home/home_controller.dart';
+import 'package:app_client/app/modules/home/home_module.dart';
 import 'package:app_client/app/modules/shared/models/weather_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lottie/lottie.dart';
 
 class WeatherInfoBottomSheetWidget extends StatelessWidget {
+  HomeController controller = HomeModule.to.get();
   WeatherModel _weatherModel;
   WeatherInfoBottomSheetWidget(this._weatherModel);
   @override
@@ -118,8 +124,17 @@ class WeatherInfoBottomSheetWidget extends StatelessWidget {
               ),
             ),
           ),
-          GestureDetector(
-            child: Container(
+          GestureDetector(onTap: () {
+            controller.setIsForRemove(!controller.isForRemove);
+            controller.isExploring
+                ? controller.saveMarker(
+                    _weatherModel.id.toString(),
+                    controller.latLng,
+                    WeatherInfoBottomSheetWidget(controller.weatherModel),
+                  )
+                : controller.removeMarkersSave(_weatherModel.id.toString());
+          }, child: Observer(builder: (_) {
+            return Container(
               height: 60,
               width: MediaQuery.of(context).size.width * 2,
               margin: EdgeInsets.fromLTRB(16, 45, 16, 20),
@@ -129,15 +144,21 @@ class WeatherInfoBottomSheetWidget extends StatelessWidget {
               ),
               alignment: Alignment.center,
               child: Text(
-                'Bookmark this location',
+                controller.isExploring
+                    ? controller.isForRemove
+                        ? "Remove From Bookmarks"
+                        : 'Bookmark this location'
+                    : controller.isForRemove
+                        ? 'Remove From Bookmarks'
+                        : "Bookmark this location",
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
                 ),
               ),
-            ),
-          ),
+            );
+          })),
         ],
       ),
     );
