@@ -11,7 +11,7 @@ This's a sample project showing how to consume the openweathermap API.
 - Visualize all bookmarked locations in the map
 - Remove a bookmark
 
-![Example](https://im2.ezgif.com/tmp/ezgif-2-1c054ba2a5ae.gif)
+![Example](https://github.com/NelsonHenryCampos/openweathermap-flutter/blob/save_bookmark/readme/app.gif?raw=true)
 ## TODO LIST
 - **Dark Mode**
 - Data Cache
