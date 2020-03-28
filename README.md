@@ -15,9 +15,7 @@ This's a sample project showing how to consume the openweathermap API.
 ## TODO LIST
 - **Dark Mode**
 - Data Cache
-- One way data flow between Ui and ViewModel (implement a state reducer)
 - Write some tests (of course)
-- Unique source of truth, implementing a centralized repository
 - Search functionality
 - Five+ days forecast
 
