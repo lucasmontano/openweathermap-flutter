@@ -60,6 +60,23 @@ mixin _$HomeController on _HomeControllerBase, Store {
     }, _$weatherModelAtom, name: '${_$weatherModelAtom.name}_set');
   }
 
+  final _$contextAtom = Atom(name: '_HomeControllerBase.context');
+
+  @override
+  BuildContext get context {
+    _$contextAtom.context.enforceReadPolicy(_$contextAtom);
+    _$contextAtom.reportObserved();
+    return super.context;
+  }
+
+  @override
+  set context(BuildContext value) {
+    _$contextAtom.context.conditionallyRunInAction(() {
+      super.context = value;
+      _$contextAtom.reportChanged();
+    }, _$contextAtom, name: '${_$contextAtom.name}_set');
+  }
+
   final _$getWeatherInfoAsyncAction = AsyncAction('getWeatherInfo');
 
   @override
@@ -69,6 +86,16 @@ mixin _$HomeController on _HomeControllerBase, Store {
 
   final _$_HomeControllerBaseActionController =
       ActionController(name: '_HomeControllerBase');
+
+  @override
+  dynamic setContext(BuildContext _context) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
+    try {
+      return super.setContext(_context);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic setLatLng(LatLng _latLng) {
@@ -81,10 +108,10 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
-  dynamic addMarkes(String _markerId, LatLng _latLng) {
+  dynamic addMarkes(String _markerId, LatLng _latLng, Widget _bottomSheet) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
     try {
-      return super.addMarkes(_markerId, _latLng);
+      return super.addMarkes(_markerId, _latLng, _bottomSheet);
     } finally {
       _$_HomeControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -93,7 +120,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
   @override
   String toString() {
     final string =
-        'markers: ${markers.toString()},latLng: ${latLng.toString()},weatherModel: ${weatherModel.toString()}';
+        'markers: ${markers.toString()},latLng: ${latLng.toString()},weatherModel: ${weatherModel.toString()},context: ${context.toString()}';
     return '{$string}';
   }
 }

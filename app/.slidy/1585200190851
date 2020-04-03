@@ -1,0 +1,4 @@
+lib/app/modules/home/widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_widget.dart
+test/app/modules/home/widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_widget_test.dart
+lib/app/modules/home/widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_controller.dart
+test/app/modules/home/widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_controller_test.dart
