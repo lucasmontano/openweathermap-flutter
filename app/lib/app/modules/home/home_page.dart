@@ -52,6 +52,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 controller.addMarkes(
                   controller.latLng.longitude.toString(),
                   controller.latLng,
+                  context,
                 );
               },
               markers: Set.from(controller.markers),

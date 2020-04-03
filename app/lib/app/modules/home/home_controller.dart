@@ -1,6 +1,8 @@
 import 'package:app_client/app/modules/shared/models/weather_model.dart';
 import 'package:app_client/app/modules/shared/repositories/weather_repository.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:app_client/app/modules/shared/widgets/popup_info_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -28,14 +30,25 @@ abstract class _HomeControllerBase with Store {
   setLatLng(LatLng _latLng) => latLng = _latLng;
 
   @action
-  addMarkes(String _markerId, LatLng _latLng) {
+  addMarkes(String _markerId, LatLng _latLng, BuildContext context) {
     markers.add(
       Marker(
         markerId: MarkerId(_markerId),
         draggable: false,
         position: _latLng,
         visible: true,
-        infoWindow: InfoWindow(title: weatherModel.name, snippet: weatherModel.weather[0].description),
+        infoWindow: InfoWindow(
+          title: weatherModel.name,
+          snippet: weatherModel.weather[0].description,
+           onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return PopupInfoWidget(weatherModel: weatherModel);
+              },
+            );
+          },
+        ),
       ),
     );
   }

@@ -81,10 +81,10 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
-  dynamic addMarkes(String _markerId, LatLng _latLng) {
+  dynamic addMarkes(String _markerId, LatLng _latLng, BuildContext context) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
     try {
-      return super.addMarkes(_markerId, _latLng);
+      return super.addMarkes(_markerId, _latLng, context);
     } finally {
       _$_HomeControllerBaseActionController.endAction(_$actionInfo);
     }
