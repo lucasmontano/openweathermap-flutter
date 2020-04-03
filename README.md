@@ -43,9 +43,11 @@
 
 ### Prerequisites
 
-- To run any Android application built with Kotlin you need to configure the environment on your machine.
+To run any Android application built with Flutter you need to configure the enviroments in your machine, you can do this following the the tutorial provided by Google in [Flutter website](https://flutter.dev/docs/get-started/install)
 
-> Needs complementation
+- Flutter SDK
+- Android Studio (to download Android SDK)
+- Xcode (for iOS develop only)
 
 ### Clone
 
@@ -57,13 +59,17 @@ https://github.com/lucasmontano/openweathermap-flutter
 
 ### Setup
 
+To run the app you need to have an online emulator or a plugged device and run the following command in the root of the application (openweathermap-flutter/app)
+
 #### Android
-
-> Needs complementation
-
+```
+flutter run
+``` 
 ### iOS (_MAC Only_)
 
-> Needs complementation
+```
+flutter run
+``` 
 
 ---
 
@@ -88,8 +94,15 @@ https://github.com/lucasmontano/openweathermap-flutter
 
 - Core
   - [Flutter](https://flutter.dev/) - Flutter is Google’s UI toolkit for building beautiful, natively compiled applications for mobile, web, and desktop from a single codebase.
-- > Needs complementation, e.g.: https://github.com/lucasmontano/openweathermap-reactnative#build-with
-
+- HTTP Comunication
+  - [Dio](https://pub.dev/packages/dio) - A powerful Http client for Dart.
+- State management
+  - [MobX](https://pub.dev/packages/mobx#-readme-tab-) - MobX is a library for reactively managing the state of your applications.
+  - [Flutter MobX](https://pub.dev/packages/flutter_mobx) - Flutter integration for MobX.
+- Project structure  
+  - [Flutter Modular](https://pub.dev/packages/flutter_modular#-readme-tab-) - Smart project structure with dependency injection and route management
+- Google Maps
+  -[Google Maps for Flutter](https://pub.dev/packages/google_maps_flutter) - A Flutter plugin for integrating Google Maps in iOS and Android applications.
 ---
 
 ## 🤔 Contributing
