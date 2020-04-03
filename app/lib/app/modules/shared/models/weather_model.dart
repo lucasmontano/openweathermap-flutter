@@ -84,8 +84,8 @@ class Coord {
     });
 
     factory Coord.fromJson(Map<String, dynamic> json) => Coord(
-        lon: json["lon"],
-        lat: json["lat"],
+        lon: json["lon"].toDouble(),
+        lat: json["lat"].toDouble(),
     );
 
     Map<String, dynamic> toJson() => {
@@ -112,7 +112,7 @@ class Main {
     });
 
     factory Main.fromJson(Map<String, dynamic> json) => Main(
-        temp: json["temp"],
+        temp: json["temp"].toDouble(),
         feelsLike: json["feels_like"],
         tempMin: json["temp_min"].toDouble(),
         tempMax: json["temp_max"].toDouble(),

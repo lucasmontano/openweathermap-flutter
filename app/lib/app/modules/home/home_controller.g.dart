@@ -26,6 +26,57 @@ mixin _$HomeController on _HomeControllerBase, Store {
     }, _$markersAtom, name: '${_$markersAtom.name}_set');
   }
 
+  final _$markersSaveAtom = Atom(name: '_HomeControllerBase.markersSave');
+
+  @override
+  ObservableList<dynamic> get markersSave {
+    _$markersSaveAtom.context.enforceReadPolicy(_$markersSaveAtom);
+    _$markersSaveAtom.reportObserved();
+    return super.markersSave;
+  }
+
+  @override
+  set markersSave(ObservableList<dynamic> value) {
+    _$markersSaveAtom.context.conditionallyRunInAction(() {
+      super.markersSave = value;
+      _$markersSaveAtom.reportChanged();
+    }, _$markersSaveAtom, name: '${_$markersSaveAtom.name}_set');
+  }
+
+  final _$isExploringAtom = Atom(name: '_HomeControllerBase.isExploring');
+
+  @override
+  bool get isExploring {
+    _$isExploringAtom.context.enforceReadPolicy(_$isExploringAtom);
+    _$isExploringAtom.reportObserved();
+    return super.isExploring;
+  }
+
+  @override
+  set isExploring(bool value) {
+    _$isExploringAtom.context.conditionallyRunInAction(() {
+      super.isExploring = value;
+      _$isExploringAtom.reportChanged();
+    }, _$isExploringAtom, name: '${_$isExploringAtom.name}_set');
+  }
+
+  final _$isForRemoveAtom = Atom(name: '_HomeControllerBase.isForRemove');
+
+  @override
+  bool get isForRemove {
+    _$isForRemoveAtom.context.enforceReadPolicy(_$isForRemoveAtom);
+    _$isForRemoveAtom.reportObserved();
+    return super.isForRemove;
+  }
+
+  @override
+  set isForRemove(bool value) {
+    _$isForRemoveAtom.context.conditionallyRunInAction(() {
+      super.isForRemove = value;
+      _$isForRemoveAtom.reportChanged();
+    }, _$isForRemoveAtom, name: '${_$isForRemoveAtom.name}_set');
+  }
+
   final _$latLngAtom = Atom(name: '_HomeControllerBase.latLng');
 
   @override
@@ -88,6 +139,26 @@ mixin _$HomeController on _HomeControllerBase, Store {
       ActionController(name: '_HomeControllerBase');
 
   @override
+  dynamic setIsExploring(bool _value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
+    try {
+      return super.setIsExploring(_value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setIsForRemove(bool _value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
+    try {
+      return super.setIsForRemove(_value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setContext(BuildContext _context) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
     try {
@@ -118,9 +189,29 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
+  dynamic saveMarker(String _markerId, LatLng _latLng, Widget _bottomSheet) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
+    try {
+      return super.saveMarker(_markerId, _latLng, _bottomSheet);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic removeMarkersSave(String _markerId) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
+    try {
+      return super.removeMarkersSave(_markerId);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     final string =
-        'markers: ${markers.toString()},latLng: ${latLng.toString()},weatherModel: ${weatherModel.toString()},context: ${context.toString()}';
+        'markers: ${markers.toString()},markersSave: ${markersSave.toString()},isExploring: ${isExploring.toString()},isForRemove: ${isForRemove.toString()},latLng: ${latLng.toString()},weatherModel: ${weatherModel.toString()},context: ${context.toString()}';
     return '{$string}';
   }
 }

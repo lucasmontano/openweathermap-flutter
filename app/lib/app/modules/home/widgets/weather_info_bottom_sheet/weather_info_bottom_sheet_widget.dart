@@ -1,10 +1,30 @@
+import 'dart:math';
+
+import 'package:app_client/app/modules/home/home_controller.dart';
+import 'package:app_client/app/modules/home/home_module.dart';
 import 'package:app_client/app/modules/shared/models/weather_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lottie/lottie.dart';
 
-class WeatherInfoBottomSheetWidget extends StatelessWidget {
+class WeatherInfoBottomSheetWidget extends StatefulWidget {
   WeatherModel _weatherModel;
   WeatherInfoBottomSheetWidget(this._weatherModel);
+
+  @override
+  _WeatherInfoBottomSheetWidgetState createState() =>
+      _WeatherInfoBottomSheetWidgetState();
+}
+
+class _WeatherInfoBottomSheetWidgetState
+    extends State<WeatherInfoBottomSheetWidget> {
+  HomeController controller = HomeModule.to.get();
+  @override
+  void initState() {
+    super.initState();
+    controller.isForRemove = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +46,7 @@ class WeatherInfoBottomSheetWidget extends StatelessWidget {
               border: Border(bottom: BorderSide(color: Colors.black, width: 3)),
             ),
             child: Text(
-              _weatherModel.name,
+              widget._weatherModel.name,
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 28,
@@ -41,7 +61,7 @@ class WeatherInfoBottomSheetWidget extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.all(16),
                     child: Text(
-                      'M ${_weatherModel.main.tempMax.round()}° / L ${_weatherModel.main.tempMin.round()}°',
+                      'M ${widget._weatherModel.main.tempMax.round()}° / L ${widget._weatherModel.main.tempMin.round()}°',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -52,7 +72,7 @@ class WeatherInfoBottomSheetWidget extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.fromLTRB(16, 45, 16, 10),
                     child: Text(
-                      '${_weatherModel.main.temp.round()}°',
+                      '${widget._weatherModel.main.temp.round()}°',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 80,
@@ -63,7 +83,7 @@ class WeatherInfoBottomSheetWidget extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(left: 16),
                     child: Text(
-                      _weatherModel.weather[0].description,
+                      widget._weatherModel.weather[0].description,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -84,7 +104,7 @@ class WeatherInfoBottomSheetWidget extends StatelessWidget {
                         ),
                         Container(
                           child: Text(
-                            '${_weatherModel.main.humidity}%',
+                            '${widget._weatherModel.main.humidity}%',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 16,
@@ -102,7 +122,7 @@ class WeatherInfoBottomSheetWidget extends StatelessWidget {
                 width: 200,
                 alignment: Alignment.center,
                 child: Lottie.asset(
-                    'assets/animations/${_weatherModel.weather[0].icon}.json',
+                    'assets/animations/${widget._weatherModel.weather[0].icon}.json',
                     fit: BoxFit.contain,
                     animate: true),
               ),
@@ -111,15 +131,25 @@ class WeatherInfoBottomSheetWidget extends StatelessWidget {
           Container(
             margin: EdgeInsets.fromLTRB(16, 45, 16, 20),
             child: Text(
-              'Right now is ${_weatherModel.main.temp.round()}°C and feels like ${_weatherModel.main.feelsLike.round()}°C\noutside. The wind is blowing arround ${_weatherModel.wind.speed}km/\nh and the pressures is ${_weatherModel.main.pressure}hPa',
+              'Right now is ${widget._weatherModel.main.temp.round()}°C and feels like ${widget._weatherModel.main.feelsLike.round()}°C\noutside. The wind is blowing arround ${widget._weatherModel.wind.speed}km/\nh and the pressures is ${widget._weatherModel.main.pressure}hPa',
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 16,
               ),
             ),
           ),
-          GestureDetector(
-            child: Container(
+          GestureDetector(onTap: () {
+            controller.setIsForRemove(!controller.isForRemove);
+            controller.isExploring
+                ? controller.saveMarker(
+                    widget._weatherModel.id.toString(),
+                    controller.latLng,
+                    WeatherInfoBottomSheetWidget(controller.weatherModel),
+                  )
+                : controller
+                    .removeMarkersSave(widget._weatherModel.id.toString());
+          }, child: Observer(builder: (_) {
+            return Container(
               height: 60,
               width: MediaQuery.of(context).size.width * 2,
               margin: EdgeInsets.fromLTRB(16, 45, 16, 20),
@@ -129,15 +159,21 @@ class WeatherInfoBottomSheetWidget extends StatelessWidget {
               ),
               alignment: Alignment.center,
               child: Text(
-                'Bookmark this location',
+                controller.isExploring
+                    ? controller.isForRemove
+                        ? "Remove From Bookmarks"
+                        : 'Bookmark this location'
+                    : controller.isForRemove
+                        ? 'Bookmark this location'
+                        : "Remove From Bookmarks",
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
                 ),
               ),
-            ),
-          ),
+            );
+          })),
         ],
       ),
     );
