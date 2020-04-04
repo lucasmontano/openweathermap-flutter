@@ -83,8 +83,8 @@ flutter run
 - [x] Visualize all bookmarked locations in the map
 - [x] Remove a bookmark
 - [x] Search functionality
+- [x] Theme Switcher (Light/Dark Mode)
 - [ ] Data Cache
-- [ ] Theme Switcher (Light/Dark Mode)
 - [ ] Five+ days forecast
 - [ ] Write some tests (of course)
 
