@@ -2,6 +2,7 @@ import 'package:app_client/app/modules/shared/models/weather_model.dart';
 import 'package:app_client/app/modules/shared/repositories/weather_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -40,6 +41,11 @@ abstract class _HomeControllerBase with Store {
   BuildContext context;
   @action
   setContext(BuildContext _context) => context = _context;
+
+  @observable
+  String address = "";
+  @action
+  setAddress(String _address) => address = _address;
 
   @action
   setLatLng(LatLng _latLng) => latLng = _latLng;
@@ -105,5 +111,14 @@ abstract class _HomeControllerBase with Store {
   @action
   removeMarkersSave(String _markerId) {
     markersSave.removeWhere((marker) => marker.markerId == MarkerId(_markerId));
+  }
+
+    searchandNavigate(GoogleMapController mapController) {
+    Geolocator().placemarkFromAddress(address).then((result) {
+      mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target:
+              LatLng(result[0].position.latitude, result[0].position.longitude),
+          zoom: 10.0)));
+    });
   }
 }

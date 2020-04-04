@@ -128,6 +128,23 @@ mixin _$HomeController on _HomeControllerBase, Store {
     }, _$contextAtom, name: '${_$contextAtom.name}_set');
   }
 
+  final _$addressAtom = Atom(name: '_HomeControllerBase.address');
+
+  @override
+  String get address {
+    _$addressAtom.context.enforceReadPolicy(_$addressAtom);
+    _$addressAtom.reportObserved();
+    return super.address;
+  }
+
+  @override
+  set address(String value) {
+    _$addressAtom.context.conditionallyRunInAction(() {
+      super.address = value;
+      _$addressAtom.reportChanged();
+    }, _$addressAtom, name: '${_$addressAtom.name}_set');
+  }
+
   final _$getWeatherInfoAsyncAction = AsyncAction('getWeatherInfo');
 
   @override
@@ -163,6 +180,16 @@ mixin _$HomeController on _HomeControllerBase, Store {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
     try {
       return super.setContext(_context);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setAddress(String _address) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
+    try {
+      return super.setAddress(_address);
     } finally {
       _$_HomeControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -211,7 +238,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
   @override
   String toString() {
     final string =
-        'markers: ${markers.toString()},markersSave: ${markersSave.toString()},isExploring: ${isExploring.toString()},isForRemove: ${isForRemove.toString()},latLng: ${latLng.toString()},weatherModel: ${weatherModel.toString()},context: ${context.toString()}';
+        'markers: ${markers.toString()},markersSave: ${markersSave.toString()},isExploring: ${isExploring.toString()},isForRemove: ${isForRemove.toString()},latLng: ${latLng.toString()},weatherModel: ${weatherModel.toString()},context: ${context.toString()},address: ${address.toString()}';
     return '{$string}';
   }
 }
