@@ -22,6 +22,11 @@ abstract class _HomeControllerBase with Store {
   ObservableList markersSave = ObservableList.of([]);
 
   @observable
+  bool isDark = false;
+  @action
+  setIsDark(bool _value) => isDark = _value;
+
+  @observable
   bool isExploring = true;
   @action
   setIsExploring(bool _value) => isExploring = _value;
