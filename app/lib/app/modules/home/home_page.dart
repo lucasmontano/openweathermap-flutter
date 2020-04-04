@@ -80,18 +80,22 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             top: 30.0,
             right: 15.0,
             left: 15.0,
-            child: Container(
+            child: Observer(builder: (_){
+              return Container(
               height: 50.0,
               width: double.infinity,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.white),
+                  color: controller.isDark ? Colors.black : Colors.white),
               child: TextField(
                 decoration: InputDecoration(
                     hintText: 'Enter Address',
+                    hintStyle: TextStyle(
+                      color: controller.isDark ? Colors.white : Colors.black
+                    ),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                    suffixIcon: Icon(Icons.search)),
+                    suffixIcon: Icon(Icons.search, color: controller.isDark ? Colors.white : Colors.black,)),
                 onChanged: (val) {
                   controller.setAddress(val);
                 },
@@ -99,7 +103,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                   controller.searchandNavigate(_googleMapController);
                 },
               ),
-            ),
+            );
+            })
           ),
           Observer(
             builder: (_) {
