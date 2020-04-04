@@ -43,6 +43,23 @@ mixin _$HomeController on _HomeControllerBase, Store {
     }, _$markersSaveAtom, name: '${_$markersSaveAtom.name}_set');
   }
 
+  final _$isDarkAtom = Atom(name: '_HomeControllerBase.isDark');
+
+  @override
+  bool get isDark {
+    _$isDarkAtom.context.enforceReadPolicy(_$isDarkAtom);
+    _$isDarkAtom.reportObserved();
+    return super.isDark;
+  }
+
+  @override
+  set isDark(bool value) {
+    _$isDarkAtom.context.conditionallyRunInAction(() {
+      super.isDark = value;
+      _$isDarkAtom.reportChanged();
+    }, _$isDarkAtom, name: '${_$isDarkAtom.name}_set');
+  }
+
   final _$isExploringAtom = Atom(name: '_HomeControllerBase.isExploring');
 
   @override
@@ -156,6 +173,16 @@ mixin _$HomeController on _HomeControllerBase, Store {
       ActionController(name: '_HomeControllerBase');
 
   @override
+  dynamic setIsDark(bool _value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
+    try {
+      return super.setIsDark(_value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setIsExploring(bool _value) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
     try {
@@ -238,7 +265,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
   @override
   String toString() {
     final string =
-        'markers: ${markers.toString()},markersSave: ${markersSave.toString()},isExploring: ${isExploring.toString()},isForRemove: ${isForRemove.toString()},latLng: ${latLng.toString()},weatherModel: ${weatherModel.toString()},context: ${context.toString()},address: ${address.toString()}';
+        'markers: ${markers.toString()},markersSave: ${markersSave.toString()},isDark: ${isDark.toString()},isExploring: ${isExploring.toString()},isForRemove: ${isForRemove.toString()},latLng: ${latLng.toString()},weatherModel: ${weatherModel.toString()},context: ${context.toString()},address: ${address.toString()}';
     return '{$string}';
   }
 }

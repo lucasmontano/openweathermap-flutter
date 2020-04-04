@@ -209,16 +209,14 @@ flutter run
 
 ### Documentation
 
-- [ ] Explore the Earth Weather forecast (Real Time)
-- [ ] Check detailed information about the weather by coordinates (lat, lon)
-- [ ] Bookmark a location
-- [ ] Visualize all bookmarked locations in the map
-- [ ] Remove a bookmark
+- [x] Explore the Earth Weather forecast (Real Time)
+- [x] Check detailed information about the weather by coordinates (lat, lon)
+- [x] Bookmark a location
+- [x] Visualize all bookmarked locations in the map
+- [x] Remove a bookmark
+- [x] Search functionality
+- [x] Theme Switcher (Light/Dark Mode)
 - [ ] Data Cache
-- [ ] Theme Switcher (Light/Dark Mode)
-- [ ] One way data flow (implement a state reducer)
-- [ ] Unique source of truth, implementing a centralized repository
-- [ ] Search functionality
 - [ ] Five+ days forecast
 - [ ] Write some tests (of course)
 
