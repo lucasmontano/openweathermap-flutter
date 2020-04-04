@@ -113,12 +113,17 @@ abstract class _HomeControllerBase with Store {
     markersSave.removeWhere((marker) => marker.markerId == MarkerId(_markerId));
   }
 
-    searchandNavigate(GoogleMapController mapController) {
+  searchandNavigate(GoogleMapController mapController) {
     Geolocator().placemarkFromAddress(address).then((result) {
-      mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          target:
-              LatLng(result[0].position.latitude, result[0].position.longitude),
-          zoom: 10.0)));
+      mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(
+                result[0].position.latitude, result[0].position.longitude),
+            zoom: 10.0,
+          ),
+        ),
+      );
     });
   }
 }
