@@ -167,11 +167,7 @@ class _WeatherInfoBottomSheetWidgetState
             GestureDetector(onTap: () {
               controller.setIsForRemove(!controller.isForRemove);
               controller.isExploring
-                  ? controller.saveMarker(
-                      widget._weatherModel.id.toString(),
-                      controller.latLng,
-                      WeatherInfoBottomSheetWidget(controller.weatherModel),
-                    )
+                  ? controller.saveMarker(widget._weatherModel)
                   : controller
                       .removeMarkersSave(widget._weatherModel.id.toString());
             }, child: Observer(builder: (_) {

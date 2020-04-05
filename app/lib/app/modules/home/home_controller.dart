@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:app_client/app/modules/home/widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_widget.dart';
+import 'package:app_client/app/modules/shared/models/marker_model.dart' as MM;
 import 'package:app_client/app/modules/shared/models/weather_model.dart';
 import 'package:app_client/app/modules/shared/repositories/weather_repository.dart';
 import 'package:dio/dio.dart';
@@ -6,6 +9,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:app_client/app/modules/shared/extentions/marker_extentions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:app_client/main.dart';
 
 part 'home_controller.g.dart';
 
@@ -14,12 +20,58 @@ class HomeController = _HomeControllerBase with _$HomeController;
 abstract class _HomeControllerBase with Store {
   WeatherRepository weatherRepository;
   Dio dio = Dio();
+  _HomeControllerBase() {
+    List<String> response = sharedPreferences.getStringList("saveMarker");
+    if (response != null && response.isNotEmpty) {
+      response.forEach(
+        (json) {
+          final model = WeatherModel.fromJsonString(json);
+          modelList.add(model);
+        },
+      );
+    }
+    autorun((_) {
+      if (modelList.length !=
+          sharedPreferences.getStringList("saveMarker")?.length) {
+        sharedPreferences.setStringList("saveMarker",
+            modelList.map((model) => model.toJsonString()).toList());
+      }
+    });
+  }
 
   @observable
   ObservableList markers = ObservableList.of([]);
 
+  @computed
+  ObservableList<Marker> get markersSave => modelList
+      .map(
+        (model) {
+          return Marker(
+            markerId: MarkerId(model.id.toString()),
+            draggable: false,
+            position: model.coord.toLatLng(),
+            visible: true,
+            infoWindow: InfoWindow(
+              onTap: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  isDismissible: true,
+                  context: context,
+                  builder: (_) => WeatherInfoBottomSheetWidget(model),
+                );
+              },
+              title: model == null ? "" : model.name,
+              snippet: model == null ? "" : model.weather[0].description,
+            ),
+          );
+        },
+      )
+      .toList()
+      .asObservable();
+
   @observable
-  ObservableList markersSave = ObservableList.of([]);
+  ObservableList<WeatherModel> modelList = ObservableList.of([]);
 
   @observable
   bool isDark = false;
@@ -81,30 +133,12 @@ abstract class _HomeControllerBase with Store {
     );
   }
 
+  @observable
+  List<String> markersList = [];
+
   @action
-  saveMarker(String _markerId, LatLng _latLng, Widget _bottomSheet) {
-    markersSave.add(
-      Marker(
-        markerId: MarkerId(_markerId),
-        draggable: false,
-        position: _latLng,
-        visible: true,
-        infoWindow: InfoWindow(
-          onTap: () {
-            showModalBottomSheet(
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              isDismissible: true,
-              context: context,
-              builder: (_) => _bottomSheet,
-            );
-          },
-          title: weatherModel == null ? "" : weatherModel.name,
-          snippet:
-              weatherModel == null ? "" : weatherModel.weather[0].description,
-        ),
-      ),
-    );
+  saveMarker(WeatherModel weatherModel) {
+    modelList.add(weatherModel);
   }
 
   @action
@@ -116,6 +150,9 @@ abstract class _HomeControllerBase with Store {
   @action
   removeMarkersSave(String _markerId) {
     markersSave.removeWhere((marker) => marker.markerId == MarkerId(_markerId));
+    markersList = [];
+    markersSave.forEach((element) => markersList.add(element.toJson()));
+    sharedPreferences.setStringList("marker", markersList);
   }
 
   searchandNavigate(GoogleMapController mapController) {

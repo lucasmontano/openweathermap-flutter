@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:app_client/app/app_widget.dart';
 import 'package:app_client/app/modules/home/home_module.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppModule extends MainModule {
   LatLng latLng;

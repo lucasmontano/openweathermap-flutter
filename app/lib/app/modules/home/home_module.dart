@@ -2,6 +2,7 @@ import 'package:app_client/app/modules/home/widgets/weather_info_bottom_sheet/we
 import 'package:app_client/app/modules/home/home_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:app_client/app/modules/home/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeModule extends ChildModule {
   @override

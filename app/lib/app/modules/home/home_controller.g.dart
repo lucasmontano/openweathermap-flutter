@@ -9,6 +9,13 @@ part of 'home_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomeController on _HomeControllerBase, Store {
+  Computed<ObservableList<Marker>> _$markersSaveComputed;
+
+  @override
+  ObservableList<Marker> get markersSave => (_$markersSaveComputed ??=
+          Computed<ObservableList<Marker>>(() => super.markersSave))
+      .value;
+
   final _$markersAtom = Atom(name: '_HomeControllerBase.markers');
 
   @override
@@ -26,21 +33,21 @@ mixin _$HomeController on _HomeControllerBase, Store {
     }, _$markersAtom, name: '${_$markersAtom.name}_set');
   }
 
-  final _$markersSaveAtom = Atom(name: '_HomeControllerBase.markersSave');
+  final _$modelListAtom = Atom(name: '_HomeControllerBase.modelList');
 
   @override
-  ObservableList<dynamic> get markersSave {
-    _$markersSaveAtom.context.enforceReadPolicy(_$markersSaveAtom);
-    _$markersSaveAtom.reportObserved();
-    return super.markersSave;
+  ObservableList<WeatherModel> get modelList {
+    _$modelListAtom.context.enforceReadPolicy(_$modelListAtom);
+    _$modelListAtom.reportObserved();
+    return super.modelList;
   }
 
   @override
-  set markersSave(ObservableList<dynamic> value) {
-    _$markersSaveAtom.context.conditionallyRunInAction(() {
-      super.markersSave = value;
-      _$markersSaveAtom.reportChanged();
-    }, _$markersSaveAtom, name: '${_$markersSaveAtom.name}_set');
+  set modelList(ObservableList<WeatherModel> value) {
+    _$modelListAtom.context.conditionallyRunInAction(() {
+      super.modelList = value;
+      _$modelListAtom.reportChanged();
+    }, _$modelListAtom, name: '${_$modelListAtom.name}_set');
   }
 
   final _$isDarkAtom = Atom(name: '_HomeControllerBase.isDark');
@@ -162,6 +169,23 @@ mixin _$HomeController on _HomeControllerBase, Store {
     }, _$addressAtom, name: '${_$addressAtom.name}_set');
   }
 
+  final _$markersListAtom = Atom(name: '_HomeControllerBase.markersList');
+
+  @override
+  List<String> get markersList {
+    _$markersListAtom.context.enforceReadPolicy(_$markersListAtom);
+    _$markersListAtom.reportObserved();
+    return super.markersList;
+  }
+
+  @override
+  set markersList(List<String> value) {
+    _$markersListAtom.context.conditionallyRunInAction(() {
+      super.markersList = value;
+      _$markersListAtom.reportChanged();
+    }, _$markersListAtom, name: '${_$markersListAtom.name}_set');
+  }
+
   final _$getWeatherInfoAsyncAction = AsyncAction('getWeatherInfo');
 
   @override
@@ -243,10 +267,10 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
-  dynamic saveMarker(String _markerId, LatLng _latLng, Widget _bottomSheet) {
+  dynamic saveMarker(WeatherModel weatherModel) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
     try {
-      return super.saveMarker(_markerId, _latLng, _bottomSheet);
+      return super.saveMarker(weatherModel);
     } finally {
       _$_HomeControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -265,7 +289,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
   @override
   String toString() {
     final string =
-        'markers: ${markers.toString()},markersSave: ${markersSave.toString()},isDark: ${isDark.toString()},isExploring: ${isExploring.toString()},isForRemove: ${isForRemove.toString()},latLng: ${latLng.toString()},weatherModel: ${weatherModel.toString()},context: ${context.toString()},address: ${address.toString()}';
+        'markers: ${markers.toString()},modelList: ${modelList.toString()},isDark: ${isDark.toString()},isExploring: ${isExploring.toString()},isForRemove: ${isForRemove.toString()},latLng: ${latLng.toString()},weatherModel: ${weatherModel.toString()},context: ${context.toString()},address: ${address.toString()},markersList: ${markersList.toString()},markersSave: ${markersSave.toString()}';
     return '{$string}';
   }
 }
