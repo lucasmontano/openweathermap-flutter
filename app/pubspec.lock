@@ -169,6 +169,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.9"
+  effective_dart:
+    dependency: "direct dev"
+    description:
+      name: effective_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.1"
   equatable:
     dependency: transitive
     description:

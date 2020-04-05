@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class WeatherModel {
+class WeatherGetResponse {
     Coord coord;
     List<Weather> weather;
     String base;
@@ -16,7 +16,7 @@ class WeatherModel {
     String name;
     int cod;
 
-    WeatherModel({
+    WeatherGetResponse({
         this.coord,
         this.weather,
         this.base,
@@ -31,12 +31,12 @@ class WeatherModel {
         this.cod,
     });
 
-    static WeatherModel fromJsonString(String json){
+    static WeatherGetResponse fromJsonString(String json){
       if(json == null) return null;
-      return WeatherModel.fromJson(jsonDecode(json));
+      return WeatherGetResponse.fromJson(jsonDecode(json));
     }
 
-    factory WeatherModel.fromJson(Map<String, dynamic> json) => WeatherModel(
+    factory WeatherGetResponse.fromJson(Map<String, dynamic> json) => WeatherGetResponse(
         coord: Coord.fromJson(json["coord"]),
         weather: List<Weather>.from(json["weather"].map((x) => Weather.fromJson(x))),
         base: json["base"],

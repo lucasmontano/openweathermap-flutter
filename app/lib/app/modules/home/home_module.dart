@@ -1,8 +1,7 @@
-import 'package:app_client/app/modules/home/widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_controller.dart';
-import 'package:app_client/app/modules/home/home_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:app_client/app/modules/home/home_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'home_controller.dart';
+import 'home_page.dart';
+import 'widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_controller.dart';
 
 class HomeModule extends ChildModule {
   @override
