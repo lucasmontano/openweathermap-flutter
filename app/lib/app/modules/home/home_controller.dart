@@ -1,35 +1,89 @@
-import 'package:app_client/app/modules/shared/models/weather_model.dart';
-import 'package:app_client/app/modules/shared/repositories/weather_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobx/mobx.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
+import '../../../main.dart';
+import '../shared/models/weather_get_response_model.dart';
+import '../shared/repositories/weather_repository.dart';
+import 'widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_widget.dart';
 
 part 'home_controller.g.dart';
 
+///HomeController
 class HomeController = _HomeControllerBase with _$HomeController;
 
 abstract class _HomeControllerBase with Store {
   WeatherRepository weatherRepository;
   Dio dio = Dio();
+  _HomeControllerBase() {
+    List response = sharedPreferences.getStringList("savedBookmark");
+    if (response != null && response.isNotEmpty) {
+      for (var json in response) {
+        final weatherGetResponse = WeatherGetResponse.fromJsonString(json);
+        weatherGetResponseList.add(weatherGetResponse);
+      }
+    }
+    autorun((_) {
+      if (weatherGetResponseList.length !=
+          sharedPreferences.getStringList("savedBookmark")?.length) {
+        sharedPreferences.setStringList(
+            "savedBookmark",
+            weatherGetResponseList
+                .map((model) => model.toJsonString())
+                .toList());
+      }
+    });
+  }
 
   @observable
-  ObservableList markers = ObservableList.of([]);
+  ObservableList temporaryMarkers = ObservableList.of([]);
+
+  @computed
+  ObservableList<Marker> get savedBookmarks => weatherGetResponseList
+      .map(
+        (weatherGetResponse) {
+          return Marker(
+            markerId: MarkerId(weatherGetResponse.id.toString()),
+            draggable: false,
+            position: weatherGetResponse.coord.toLatLng(),
+            visible: true,
+            infoWindow: InfoWindow(
+              onTap: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  isDismissible: true,
+                  context: context,
+                  builder: (_) =>
+                      WeatherInfoBottomSheetWidget(weatherGetResponse),
+                );
+              },
+              title: weatherGetResponse == null ? "" : weatherGetResponse.name,
+              snippet: weatherGetResponse == null
+                  ? ""
+                  : weatherGetResponse.weather[0].description,
+            ),
+          );
+        },
+      )
+      .toList()
+      .asObservable();
 
   @observable
-  ObservableList markersSave = ObservableList.of([]);
+  ObservableList<WeatherGetResponse> weatherGetResponseList =
+      ObservableList.of([]);
 
   @observable
   bool isDark = false;
+
   @action
-  setIsDark(bool _value) => isDark = _value;
+  void setIsDark(bool _value) => isDark = _value;
 
   @observable
   bool isExploring = true;
   @action
-  setIsExploring(bool _value) => isExploring = _value;
+  void setIsExploring(bool _value) => isExploring = _value;
 
   @observable
   bool isForRemove = false;
@@ -40,7 +94,7 @@ abstract class _HomeControllerBase with Store {
   LatLng latLng;
 
   @observable
-  WeatherModel weatherModel;
+  WeatherGetResponse weatherGetResponse;
 
   @observable
   BuildContext context;
@@ -56,8 +110,8 @@ abstract class _HomeControllerBase with Store {
   setLatLng(LatLng _latLng) => latLng = _latLng;
 
   @action
-  addMarkes(String _markerId, LatLng _latLng, Widget _bottomSheet) {
-    markers.add(
+  onAddTemporaryMarkers(String _markerId, LatLng _latLng, Widget _bottomSheet) {
+    temporaryMarkers.add(
       Marker(
         markerId: MarkerId(_markerId),
         draggable: false,
@@ -73,49 +127,30 @@ abstract class _HomeControllerBase with Store {
               builder: (_) => _bottomSheet,
             );
           },
-          title: weatherModel == null ? "" : weatherModel.name,
-          snippet:
-              weatherModel == null ? "" : weatherModel.weather[0].description,
+          title: weatherGetResponse == null ? "" : weatherGetResponse.name,
+          snippet: weatherGetResponse == null
+              ? ""
+              : weatherGetResponse.weather[0].description,
         ),
       ),
     );
   }
 
   @action
-  saveMarker(String _markerId, LatLng _latLng, Widget _bottomSheet) {
-    markersSave.add(
-      Marker(
-        markerId: MarkerId(_markerId),
-        draggable: false,
-        position: _latLng,
-        visible: true,
-        infoWindow: InfoWindow(
-          onTap: () {
-            showModalBottomSheet(
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              isDismissible: true,
-              context: context,
-              builder: (_) => _bottomSheet,
-            );
-          },
-          title: weatherModel == null ? "" : weatherModel.name,
-          snippet:
-              weatherModel == null ? "" : weatherModel.weather[0].description,
-        ),
-      ),
-    );
+  onBookmarked(WeatherGetResponse weatherGetResponse) {
+    weatherGetResponseList.add(weatherGetResponse);
   }
 
   @action
-  Future getWeatherInfo() async {
+  Future<void> getWeatherResponse() async {
     weatherRepository = WeatherRepository(latLng);
-    weatherModel = await weatherRepository.fetchPost(dio);
+    weatherGetResponse = await weatherRepository.fetchPost(dio);
   }
 
   @action
-  removeMarkersSave(String _markerId) {
-    markersSave.removeWhere((marker) => marker.markerId == MarkerId(_markerId));
+  onRemoveBookmark(String _markerId) {
+    savedBookmarks
+        .removeWhere((marker) => marker.markerId == MarkerId(_markerId));
   }
 
   searchandNavigate(GoogleMapController mapController) {

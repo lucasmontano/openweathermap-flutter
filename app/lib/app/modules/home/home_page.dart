@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
-import 'package:app_client/app/modules/home/widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'home_controller.dart';
+import 'widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -17,11 +18,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
   //use 'controller' variable to access controller
-
-  Completer<GoogleMapController> _completer = Completer();
+  final Completer<GoogleMapController> _completer = Completer();
   GoogleMapController _googleMapController;
 
-  Random _random = Random();
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 10,
@@ -39,8 +38,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             child: Observer(
               builder: (_) {
                 return GoogleMap(
-                  onCameraMove: (CameraPosition cameraPosition) async {
-                    LatLng latLng = await _googleMapController.getLatLng(
+                  onCameraMove: (cameraPosition) async {
+                    var latLng = await _googleMapController.getLatLng(
                       ScreenCoordinate(
                         x: (context.size.width * devicePixelRatio) ~/ 2.0,
                         y: (context.size.height * devicePixelRatio) ~/ 2.0,
@@ -52,23 +51,24 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                     if (controller.latLng == null) {
                       return;
                     }
-                    await controller.getWeatherInfo();
-                    controller.markers.length >= 1
-                        ? controller.markers.removeAt(0)
-                        : null;
+                    await controller.getWeatherResponse();
+                    controller.temporaryMarkers.length >= 1
+                        ? controller.temporaryMarkers.removeAt(0)
+                        : //null
 
-                    controller.addMarkes(
+                    controller.onAddTemporaryMarkers(
                       controller.latLng.longitude.toString(),
                       controller.latLng,
-                      WeatherInfoBottomSheetWidget(controller.weatherModel),
+                      WeatherInfoBottomSheetWidget(
+                          controller.weatherGetResponse),
                     );
                   },
                   markers: Set.from(controller.isExploring
-                      ? controller.markers
-                      : controller.markersSave),
+                      ? controller.temporaryMarkers
+                      : controller.savedBookmarks),
                   mapType: MapType.normal,
                   initialCameraPosition: _kGooglePlex,
-                  onMapCreated: (GoogleMapController controller) async {
+                  onMapCreated: (controller) async {
                     _completer.complete(controller);
                     _googleMapController = await _completer.future;
                   },
@@ -77,35 +77,39 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             ),
           ),
           Positioned(
-            top: 30.0,
-            right: 15.0,
-            left: 15.0,
-            child: Observer(builder: (_){
-              return Container(
-              height: 50.0,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: controller.isDark ? Colors.black : Colors.white),
-              child: TextField(
-                decoration: InputDecoration(
-                    hintText: 'Enter Address',
-                    hintStyle: TextStyle(
-                      color: controller.isDark ? Colors.white : Colors.black
+              top: 30.0,
+              right: 15.0,
+              left: 15.0,
+              child: Observer(builder: (_) {
+                return Container(
+                  height: 50.0,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: controller.isDark ? Colors.black : Colors.white),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Enter Address',
+                      hintStyle: TextStyle(
+                          color:
+                              controller.isDark ? Colors.white : Colors.black),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                      suffixIcon: Icon(
+                        Icons.search,
+                        color: controller.isDark ? Colors.white : Colors.black,
+                      ),
                     ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                    suffixIcon: Icon(Icons.search, color: controller.isDark ? Colors.white : Colors.black,)),
-                onChanged: (val) {
-                  controller.setAddress(val);
-                },
-                onSubmitted: (text){
-                  controller.searchandNavigate(_googleMapController);
-                },
-              ),
-            );
-            })
-          ),
+                    onChanged: (address) {
+                      if(address == null) return null;
+                      controller.setAddress(address);
+                    },
+                    onSubmitted: (text) {
+                      controller.searchandNavigate(_googleMapController);
+                    },
+                  ),
+                );
+              })),
           Observer(
             builder: (_) {
               return controller.isExploring

@@ -1,15 +1,14 @@
-import 'dart:math';
-
-import 'package:app_client/app/modules/home/home_controller.dart';
-import 'package:app_client/app/modules/home/home_module.dart';
-import 'package:app_client/app/modules/shared/models/weather_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../shared/models/weather_get_response_model.dart';
+import '../../home_controller.dart';
+import '../../home_module.dart';
+
 class WeatherInfoBottomSheetWidget extends StatefulWidget {
-  WeatherModel _weatherModel;
-  WeatherInfoBottomSheetWidget(this._weatherModel);
+  final WeatherGetResponse _weatherGetResponse;
+  WeatherInfoBottomSheetWidget(this._weatherGetResponse);
 
   @override
   _WeatherInfoBottomSheetWidgetState createState() =>
@@ -54,7 +53,7 @@ class _WeatherInfoBottomSheetWidgetState
                             width: 3)),
                   ),
                   child: Text(
-                    widget._weatherModel.name,
+                    widget._weatherGetResponse.name,
                     style: TextStyle(
                       color: controller.isDark ? Colors.white : Colors.black,
                       fontSize: 28,
@@ -77,7 +76,7 @@ class _WeatherInfoBottomSheetWidgetState
                     Container(
                       margin: EdgeInsets.all(16),
                       child: Text(
-                        'M ${widget._weatherModel.main.tempMax.round()}° / L ${widget._weatherModel.main.tempMin.round()}°',
+                        'M ${widget._weatherGetResponse.main.tempMax.round()}° / L ${widget._weatherGetResponse.main.tempMin.round()}°',
                         style: TextStyle(
                           color:
                               controller.isDark ? Colors.white : Colors.black,
@@ -89,7 +88,7 @@ class _WeatherInfoBottomSheetWidgetState
                     Container(
                       margin: EdgeInsets.fromLTRB(16, 45, 16, 10),
                       child: Text(
-                        '${widget._weatherModel.main.temp.round()}°',
+                        '${widget._weatherGetResponse.main.temp.round()}°',
                         style: TextStyle(
                           color:
                               controller.isDark ? Colors.white : Colors.black,
@@ -101,7 +100,7 @@ class _WeatherInfoBottomSheetWidgetState
                     Container(
                       margin: EdgeInsets.only(left: 16),
                       child: Text(
-                        widget._weatherModel.weather[0].description,
+                        widget._weatherGetResponse.weather[0].description,
                         style: TextStyle(
                           color:
                               controller.isDark ? Colors.white : Colors.black,
@@ -128,7 +127,7 @@ class _WeatherInfoBottomSheetWidgetState
                           ),
                           Container(
                             child: Text(
-                              '${widget._weatherModel.main.humidity}%',
+                              '${widget._weatherGetResponse.main.humidity}%',
                               style: TextStyle(
                                 color: controller.isDark
                                     ? Colors.white
@@ -148,7 +147,7 @@ class _WeatherInfoBottomSheetWidgetState
                   width: 200,
                   alignment: Alignment.center,
                   child: Lottie.asset(
-                      'assets/animations/${widget._weatherModel.weather[0].icon}.json',
+                      'assets/animations/${widget._weatherGetResponse.weather[0].icon}.json',
                       fit: BoxFit.contain,
                       animate: true),
                 ),
@@ -157,7 +156,7 @@ class _WeatherInfoBottomSheetWidgetState
             Container(
               margin: EdgeInsets.fromLTRB(16, 45, 16, 20),
               child: Text(
-                'Right now is ${widget._weatherModel.main.temp.round()}°C and feels like ${widget._weatherModel.main.feelsLike.round()}°C\noutside. The wind is blowing arround ${widget._weatherModel.wind.speed}km/\nh and the pressures is ${widget._weatherModel.main.pressure}hPa',
+                'Right now is ${widget._weatherGetResponse.main.temp.round()}°C and feels like ${widget._weatherGetResponse.main.feelsLike.round()}°C\noutside. The wind is blowing arround ${widget._weatherGetResponse.wind.speed}km/\nh and the pressures is ${widget._weatherGetResponse.main.pressure}hPa',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: 16,
@@ -167,13 +166,9 @@ class _WeatherInfoBottomSheetWidgetState
             GestureDetector(onTap: () {
               controller.setIsForRemove(!controller.isForRemove);
               controller.isExploring
-                  ? controller.saveMarker(
-                      widget._weatherModel.id.toString(),
-                      controller.latLng,
-                      WeatherInfoBottomSheetWidget(controller.weatherModel),
-                    )
-                  : controller
-                      .removeMarkersSave(widget._weatherModel.id.toString());
+                  ? controller.onBookmarked(widget._weatherGetResponse)
+                  : controller.onRemoveBookmark(
+                      widget._weatherGetResponse.id.toString());
             }, child: Observer(builder: (_) {
               return Container(
                 height: 60,
