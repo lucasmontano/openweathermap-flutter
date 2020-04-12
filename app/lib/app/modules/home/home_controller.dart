@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobx/mobx.dart';
@@ -34,7 +35,30 @@ abstract class _HomeControllerBase with Store {
                 .toList());
       }
     });
+
+    reaction((_) => isDark, _setThemeMap);
+    when((_) => googleMapController != null, _checkTheme);
   }
+
+  void _setThemeMap(isDark) async {
+    var mapStyle = isDark ? await getDarkStyle() : "[]";
+    googleMapController.setMapStyle(mapStyle);
+  }
+
+  @observable
+  GoogleMapController googleMapController;
+
+  @action
+  setGoogleMapController(GoogleMapController controller) =>
+      googleMapController = controller;
+
+  void _checkTheme() {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    setIsDark(brightness == Brightness.dark);
+  }
+
+  Future<String> getDarkStyle() =>
+      rootBundle.loadString('assets/map/dark_map_style.txt');
 
   @observable
   ObservableList temporaryMarkers = ObservableList.of([]);
@@ -153,9 +177,9 @@ abstract class _HomeControllerBase with Store {
         .removeWhere((marker) => marker.markerId == MarkerId(_markerId));
   }
 
-  searchandNavigate(GoogleMapController mapController) {
+  searchandNavigate(_) {
     Geolocator().placemarkFromAddress(address).then((result) {
-      mapController.animateCamera(
+      googleMapController.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
             target: LatLng(
