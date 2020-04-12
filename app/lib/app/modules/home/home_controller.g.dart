@@ -187,7 +187,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
       ActionController(name: '_HomeControllerBase');
 
   @override
-  dynamic setIsDark(bool _value) {
+  void setIsDark(bool _value) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
     try {
       return super.setIsDark(_value);
@@ -197,7 +197,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
-  dynamic setIsExploring(bool _value) {
+  void setIsExploring(bool _value) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
     try {
       return super.setIsExploring(_value);

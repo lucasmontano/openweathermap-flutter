@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobx/mobx.dart';
@@ -34,7 +35,17 @@ abstract class _HomeControllerBase with Store {
                 .toList());
       }
     });
+
+    when((_) => context != null, _checkTheme);
   }
+
+  void _checkTheme() {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    setIsDark(brightness == Brightness.dark);
+  }
+
+  Future<String> getDarkStyle() =>
+      rootBundle.loadString('assets/map/dark_map_style.txt');
 
   @observable
   ObservableList temporaryMarkers = ObservableList.of([]);

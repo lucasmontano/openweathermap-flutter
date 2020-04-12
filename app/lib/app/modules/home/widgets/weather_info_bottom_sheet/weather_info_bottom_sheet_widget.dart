@@ -30,7 +30,7 @@ class _WeatherInfoBottomSheetWidgetState
       return Container(
         height: MediaQuery.of(context).size.height * 0.9,
         decoration: BoxDecoration(
-          color: controller.isDark ? Colors.black : Colors.white,
+          color: controller.isDark ? Colors.grey[850] : Colors.white,
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(20),
             topLeft: Radius.circular(20),

@@ -38,6 +38,7 @@ flutter:
 
   assets:
     - assets/animations/
+    - assets/map/dark_map_style.txt
 
   # fonts:
   #   - family: Schyler

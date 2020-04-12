@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mobx/mobx.dart';
 
 import 'home_controller.dart';
 import 'widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_widget.dart';
@@ -25,6 +26,19 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 10,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    reaction((_) => controller.isDark, _themeMode);
+  }
+
+  void _themeMode(isDark) async {
+    var mapStyle = isDark ? await controller.getDarkStyle() : "[]";
+
+    await _completer.future
+      ..setMapStyle(mapStyle);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +70,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                         ? controller.temporaryMarkers.removeAt(0)
                         : //null
 
-                    controller.onAddTemporaryMarkers(
-                      controller.latLng.longitude.toString(),
-                      controller.latLng,
-                      WeatherInfoBottomSheetWidget(
-                          controller.weatherGetResponse),
-                    );
+                        controller.onAddTemporaryMarkers(
+                            controller.latLng.longitude.toString(),
+                            controller.latLng,
+                            WeatherInfoBottomSheetWidget(
+                                controller.weatherGetResponse),
+                          );
                   },
                   markers: Set.from(controller.isExploring
                       ? controller.temporaryMarkers
@@ -86,8 +100,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
-                      color: controller.isDark ? Colors.black : Colors.white),
+                      color:
+                          controller.isDark ? Colors.grey[850] : Colors.white),
                   child: TextField(
+                    style: TextStyle(
+                      color: controller.isDark ? Colors.white : Colors.black,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Enter Address',
                       hintStyle: TextStyle(
@@ -101,7 +119,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       ),
                     ),
                     onChanged: (address) {
-                      if(address == null) return null;
+                      if (address == null) return null;
                       controller.setAddress(address);
                     },
                     onSubmitted: (text) {
@@ -156,6 +174,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             onPressed: () {
               controller.setIsExploring(!controller.isExploring);
             },
+            backgroundColor: controller.isDark ? Colors.grey[850] : Colors.blue,
             child: controller.isExploring
                 ? Icon(Icons.add_location)
                 : Icon(Icons.map),
