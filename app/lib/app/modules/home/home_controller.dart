@@ -36,8 +36,21 @@ abstract class _HomeControllerBase with Store {
       }
     });
 
-    when((_) => context != null, _checkTheme);
+    reaction((_) => isDark, _setThemeMap);
+    when((_) => googleMapController != null, _checkTheme);
   }
+
+  void _setThemeMap(isDark) async {
+    var mapStyle = isDark ? await getDarkStyle() : "[]";
+    googleMapController.setMapStyle(mapStyle);
+  }
+
+  @observable
+  GoogleMapController googleMapController;
+
+  @action
+  setGoogleMapController(GoogleMapController controller) =>
+      googleMapController = controller;
 
   void _checkTheme() {
     var brightness = MediaQuery.of(context).platformBrightness;
@@ -164,9 +177,9 @@ abstract class _HomeControllerBase with Store {
         .removeWhere((marker) => marker.markerId == MarkerId(_markerId));
   }
 
-  searchandNavigate(GoogleMapController mapController) {
+  searchandNavigate(_) {
     Geolocator().placemarkFromAddress(address).then((result) {
-      mapController.animateCamera(
+      googleMapController.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
             target: LatLng(
