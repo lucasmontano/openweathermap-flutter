@@ -16,6 +16,26 @@ mixin _$HomeController on _HomeControllerBase, Store {
           Computed<ObservableList<Marker>>(() => super.savedBookmarks))
       .value;
 
+  final _$googleMapControllerAtom =
+      Atom(name: '_HomeControllerBase.googleMapController');
+
+  @override
+  GoogleMapController get googleMapController {
+    _$googleMapControllerAtom.context
+        .enforceReadPolicy(_$googleMapControllerAtom);
+    _$googleMapControllerAtom.reportObserved();
+    return super.googleMapController;
+  }
+
+  @override
+  set googleMapController(GoogleMapController value) {
+    _$googleMapControllerAtom.context.conditionallyRunInAction(() {
+      super.googleMapController = value;
+      _$googleMapControllerAtom.reportChanged();
+    }, _$googleMapControllerAtom,
+        name: '${_$googleMapControllerAtom.name}_set');
+  }
+
   final _$temporaryMarkersAtom =
       Atom(name: '_HomeControllerBase.temporaryMarkers');
 
@@ -196,6 +216,16 @@ mixin _$HomeController on _HomeControllerBase, Store {
       ActionController(name: '_HomeControllerBase');
 
   @override
+  dynamic setGoogleMapController(GoogleMapController controller) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
+    try {
+      return super.setGoogleMapController(controller);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setIsDark(bool _value) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction();
     try {
@@ -289,7 +319,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
   @override
   String toString() {
     final string =
-        'temporaryMarkers: ${temporaryMarkers.toString()},weatherGetResponseList: ${weatherGetResponseList.toString()},isDark: ${isDark.toString()},isExploring: ${isExploring.toString()},isForRemove: ${isForRemove.toString()},latLng: ${latLng.toString()},weatherGetResponse: ${weatherGetResponse.toString()},context: ${context.toString()},address: ${address.toString()},savedBookmarks: ${savedBookmarks.toString()}';
+        'googleMapController: ${googleMapController.toString()},temporaryMarkers: ${temporaryMarkers.toString()},weatherGetResponseList: ${weatherGetResponseList.toString()},isDark: ${isDark.toString()},isExploring: ${isExploring.toString()},isForRemove: ${isForRemove.toString()},latLng: ${latLng.toString()},weatherGetResponse: ${weatherGetResponse.toString()},context: ${context.toString()},address: ${address.toString()},savedBookmarks: ${savedBookmarks.toString()}';
     return '{$string}';
   }
 }

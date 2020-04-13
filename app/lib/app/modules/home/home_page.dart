@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -18,8 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
   //use 'controller' variable to access controller
-  final Completer<GoogleMapController> _completer = Completer();
-  GoogleMapController _googleMapController;
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -73,7 +70,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
-                      color: controller.isDark ? Colors.black : Colors.white),
+                      color:
+                          controller.isDark ? Colors.grey[850] : Colors.white),
                   child: TextField(
                     style: TextStyle(
                       color: controller.isDark ? Colors.white : Colors.black
@@ -94,9 +92,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       if (address == null) return null;
                       controller.setAddress(address);
                     },
-                    onSubmitted: (text) {
-                      controller.searchandNavigate(_googleMapController);
-                    },
+                    onSubmitted: controller.searchandNavigate,
                   ),
                 );
               })),
@@ -146,6 +142,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             onPressed: () {
               controller.setIsExploring(!controller.isExploring);
             },
+            backgroundColor: controller.isDark ? Colors.grey[850] : Colors.blue,
             child: controller.isExploring
                 ? Icon(Icons.add_location)
                 : Icon(Icons.map),
