@@ -1,0 +1,288 @@
+swagger: '2.0'
+tags:
+  - name: Forecast
+    description: Get 5 day weather
+  - name: Weather
+    description: Get current weather data
+schemes:
+  - https
+host: api.openweathermap.org
+basePath: /data/2.5
+info:
+  title: OpenWeather API
+  version: 1.0.0
+paths:
+  /forecast:
+    get:
+      tags:
+        - Forecast
+      summary: Get the 5 day weather
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          description: Latitude
+          type: number
+          format: double
+        - name: lon
+          in: query
+          required: true
+          description: longitude
+          type: number
+          format: double
+        - name: appid
+          in: query
+          required: true
+          description: Api key
+          type: string
+        - name: units
+          in: query
+          required: true
+          description: Units
+          type: string
+          enum:
+            - metric
+      responses:
+        '200':
+          description: Sucess
+          schema:
+            $ref: '#/definitions/ForecastGetResponse'
+        '401':
+          description: Invalid API key
+          schema:
+            type: object
+            properties:
+              cod:
+                type: string
+              message:
+                type: string
+        '404':
+          description: A user with the specified ID was not found.
+        default:
+          description: Unexpected error
+  /weather:
+    get:
+      tags:
+        - Weather
+      description: get current wearther data by coordinates
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          description: Latitude
+          type: number
+          format: double
+        - name: lon
+          in: query
+          required: true
+          description: longitude
+          type: number
+          format: double
+        - name: appid
+          in: query
+          required: true
+          description: Api key
+          type: string
+        - name: units
+          in: query
+          required: true
+          description: Units
+          type: string
+          enum:
+            - metric
+      responses:
+        '200':
+          description: Sucess
+          schema:
+            $ref: '#/definitions/WeatherGetResonse'
+        '401':
+          description: Invalid API key
+          schema:
+            type: object
+            properties:
+              cod:
+                type: string
+              message:
+                type: string
+        '404':
+          description: A user with the specified ID was not found.
+        default:
+          description: Unexpected error
+definitions:
+  WeatherGetResonse:
+    type: object
+    properties:
+      coord:
+        type: object
+        properties:
+          lon:
+            type: number
+          lat:
+            type: number
+      weather:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: number
+              format: int64
+            main:
+              type: string
+            description:
+              type: string
+            icon:
+              type: string
+      base:
+        type: string
+      main:
+        type: object
+        properties:
+          temp:
+            type: number
+          feels_like:
+            type: number
+          temp_min:
+            type: number
+          temp_max:
+            type: number
+          pressure:
+            type: number
+          sea_level:
+            type: number
+          grnd_level:
+            type: number
+          humidity:
+            type: number
+          temp_kf:
+            type: number
+      wind:
+        type: object
+        properties:
+          speed:
+            type: number
+          deg:
+            type: number
+      cloud:
+        type: object
+        properties:
+          all:
+            type: number
+      dt:
+        type: string
+      sys:
+        type: object
+        properties:
+          type:
+            type: number
+          id:
+            type: number
+          message:
+            type: string
+          coutry:
+            type: string
+          sunrise:
+            type: number
+          sunset:
+            type: number
+      timezone:
+        type: number
+      id:
+        type: number
+      name:
+        type: string
+      cod:
+        type: number
+  ForecastGetResponse:
+    type: object
+    properties:
+      cod:
+        type: string
+      message:
+        type: number
+      cnt:
+        type: number
+      list:
+        type: array
+        items:
+          type: object
+          properties:
+            dt:
+              type: string
+            main:
+              type: object
+              properties:
+                temp:
+                  type: number
+                feels_like:
+                  type: number
+                temp_min:
+                  type: number
+                temp_max:
+                  type: number
+                pressure:
+                  type: number
+                sea_level:
+                  type: number
+                grnd_level:
+                  type: number
+                humidity:
+                  type: number
+                temp_kf:
+                  type: number
+            weather:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  main:
+                    type: string
+                  description:
+                    type: string
+                  icon:
+                    type: string
+            clouds:
+              type: object
+              properties:
+                all:
+                  type: number
+            wind:
+              type: object
+              properties:
+                speed:
+                  type: number
+                deg:
+                  type: number
+            rain:
+              type: object
+            sys:
+              type: object
+              properties:
+                pod:
+                  type: string
+            dt_txt:
+              type: string
+      city:
+        type: object
+        properties:
+          id:
+            type: number
+          name:
+            type: string
+          coord:
+            type: object
+            properties:
+              lat:
+                type: number
+              lon:
+                type: number
+          contry:
+            type: string
+          timezone:
+            type: number
+          sunrise:
+            type: number
+          sunset:
+            type: number
