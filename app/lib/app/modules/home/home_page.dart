@@ -48,20 +48,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                     controller.setLatLng(latLng);
                   },
                   onCameraIdle: () async {
-                    if (controller.latLng == null) {
-                      return;
-                    }
-                    await controller.getWeatherResponse();
-                    controller.temporaryMarkers.length >= 1
-                        ? controller.temporaryMarkers.removeAt(0)
-                        : //null
-
-                    controller.onAddTemporaryMarkers(
-                      controller.latLng.longitude.toString(),
-                      controller.latLng,
-                      WeatherInfoBottomSheetWidget(
-                          controller.weatherGetResponse),
-                    );
+                    await controller.onGoogleMapsCameraIdle();
                   },
                   markers: Set.from(controller.isExploring
                       ? controller.temporaryMarkers
@@ -88,6 +75,9 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       borderRadius: BorderRadius.circular(10.0),
                       color: controller.isDark ? Colors.black : Colors.white),
                   child: TextField(
+                    style: TextStyle(
+                      color: controller.isDark ? Colors.white : Colors.black
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Enter Address',
                       hintStyle: TextStyle(
@@ -101,7 +91,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       ),
                     ),
                     onChanged: (address) {
-                      if(address == null) return null;
+                      if (address == null) return null;
                       controller.setAddress(address);
                     },
                     onSubmitted: (text) {
