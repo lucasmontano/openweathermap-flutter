@@ -10,41 +10,37 @@ part of 'weather_info_bottom_sheet_controller.dart';
 
 mixin _$WeatherInfoBottomSheetController
     on _WeatherInfoBottomSheetControllerBase, Store {
-  final _$valueAtom = Atom(name: '_WeatherInfoBottomSheetControllerBase.value');
+  final _$forecastGetResponseAtom =
+      Atom(name: '_WeatherInfoBottomSheetControllerBase.forecastGetResponse');
 
   @override
-  int get value {
-    _$valueAtom.context.enforceReadPolicy(_$valueAtom);
-    _$valueAtom.reportObserved();
-    return super.value;
+  ForecastGetResponse get forecastGetResponse {
+    _$forecastGetResponseAtom.context
+        .enforceReadPolicy(_$forecastGetResponseAtom);
+    _$forecastGetResponseAtom.reportObserved();
+    return super.forecastGetResponse;
   }
 
   @override
-  set value(int value) {
-    _$valueAtom.context.conditionallyRunInAction(() {
-      super.value = value;
-      _$valueAtom.reportChanged();
-    }, _$valueAtom, name: '${_$valueAtom.name}_set');
+  set forecastGetResponse(ForecastGetResponse value) {
+    _$forecastGetResponseAtom.context.conditionallyRunInAction(() {
+      super.forecastGetResponse = value;
+      _$forecastGetResponseAtom.reportChanged();
+    }, _$forecastGetResponseAtom,
+        name: '${_$forecastGetResponseAtom.name}_set');
   }
 
-  final _$_WeatherInfoBottomSheetControllerBaseActionController =
-      ActionController(name: '_WeatherInfoBottomSheetControllerBase');
+  final _$getForecastResponseAsyncAction = AsyncAction('getForecastResponse');
 
   @override
-  void increment() {
-    final _$actionInfo =
-        _$_WeatherInfoBottomSheetControllerBaseActionController.startAction();
-    try {
-      return super.increment();
-    } finally {
-      _$_WeatherInfoBottomSheetControllerBaseActionController
-          .endAction(_$actionInfo);
-    }
+  Future<void> getForecastResponse(double lat, double lon) {
+    return _$getForecastResponseAsyncAction
+        .run(() => super.getForecastResponse(lat, lon));
   }
 
   @override
   String toString() {
-    final string = 'value: ${value.toString()}';
+    final string = 'forecastGetResponse: ${forecastGetResponse.toString()}';
     return '{$string}';
   }
 }

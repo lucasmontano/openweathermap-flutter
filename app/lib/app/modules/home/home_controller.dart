@@ -1,3 +1,4 @@
+import 'package:app_client/swagger/api.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -5,8 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobx/mobx.dart';
 import '../../../main.dart';
-import '../shared/models/weather_get_response_model.dart';
-import '../shared/repositories/weather_repository.dart';
+
 import 'widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_widget.dart';
 
 part 'home_controller.g.dart';
@@ -15,20 +15,19 @@ part 'home_controller.g.dart';
 class HomeController = _HomeControllerBase with _$HomeController;
 
 abstract class _HomeControllerBase with Store {
-  WeatherRepository weatherRepository;
-  Dio dio = Dio();
   _HomeControllerBase() {
-    List response = sharedPreferences.getStringList("savedBookmark");
+    var response = sharedPreferences.getStringList("savedBookmark");
     if (response != null && response.isNotEmpty) {
       for (var json in response) {
         final weatherGetResponse = WeatherGetResponse.fromJsonString(json);
         weatherGetResponseList.add(weatherGetResponse);
       }
     }
-    autorun((_) {
-      if (weatherGetResponseList.length !=
-          sharedPreferences.getStringList("savedBookmark")?.length) {
-        sharedPreferences.setStringList(
+    autorun(
+      (_) {
+        if (weatherGetResponseList.length !=
+            sharedPreferences.getStringList("savedBookmark")?.length) {
+          sharedPreferences.setStringList(
             "savedBookmark",
             weatherGetResponseList
                 .map((model) => model.toJsonString())
@@ -167,8 +166,23 @@ abstract class _HomeControllerBase with Store {
 
   @action
   Future<void> getWeatherResponse() async {
-    weatherRepository = WeatherRepository(latLng);
-    weatherGetResponse = await weatherRepository.fetchPost(dio);
+    weatherGetResponse = await WeatherApi().weatherGet(latLng.latitude,
+        latLng.longitude, "c6e381d8c7ff98f0fee43775817cf6ad", "metric");
+  }
+
+  @action
+  Future<void> onGoogleMapsCameraIdle() async {
+    if (latLng == null) {
+      return;
+    }
+    await getWeatherResponse();
+    temporaryMarkers.length >= 1 ? temporaryMarkers.removeAt(0) : null;
+
+    onAddTemporaryMarkers(
+      latLng.longitude.toString(),
+      latLng,
+      WeatherInfoBottomSheetWidget(weatherGetResponse),
+    );
   }
 
   @action

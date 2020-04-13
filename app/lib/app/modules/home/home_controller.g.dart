@@ -203,6 +203,15 @@ mixin _$HomeController on _HomeControllerBase, Store {
         .run(() => super.getWeatherResponse());
   }
 
+  final _$onGoogleMapsCameraIdleAsyncAction =
+      AsyncAction('onGoogleMapsCameraIdle');
+
+  @override
+  Future<void> onGoogleMapsCameraIdle() {
+    return _$onGoogleMapsCameraIdleAsyncAction
+        .run(() => super.onGoogleMapsCameraIdle());
+  }
+
   final _$_HomeControllerBaseActionController =
       ActionController(name: '_HomeControllerBase');
 

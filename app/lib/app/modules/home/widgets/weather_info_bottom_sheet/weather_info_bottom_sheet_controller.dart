@@ -1,3 +1,4 @@
+import 'package:app_client/swagger/api.dart';
 import 'package:mobx/mobx.dart';
 
 part 'weather_info_bottom_sheet_controller.g.dart';
@@ -7,10 +8,10 @@ class WeatherInfoBottomSheetController = _WeatherInfoBottomSheetControllerBase
 
 abstract class _WeatherInfoBottomSheetControllerBase with Store {
   @observable
-  int value = 0;
+  ForecastGetResponse forecastGetResponse;
 
   @action
-  void increment() {
-    value++;
+  Future<void> getForecastResponse(double lat, double lon) async{
+    forecastGetResponse = await ForecastApi().forecastGet(lat, lon, "c6e381d8c7ff98f0fee43775817cf6ad", "metric");
   }
 }
