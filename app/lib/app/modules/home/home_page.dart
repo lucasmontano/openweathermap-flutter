@@ -36,7 +36,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               builder: (_) {
                 return GoogleMap(
                   onCameraMove: (cameraPosition) async {
-                    var latLng = await _googleMapController.getLatLng(
+                    var latLng = await controller.googleMapController.getLatLng(
                       ScreenCoordinate(
                         x: (context.size.width * devicePixelRatio) ~/ 2.0,
                         y: (context.size.height * devicePixelRatio) ~/ 2.0,
@@ -52,9 +52,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       : controller.savedBookmarks),
                   mapType: MapType.normal,
                   initialCameraPosition: _kGooglePlex,
-                  onMapCreated: (controller) async {
-                    _completer.complete(controller);
-                    _googleMapController = await _completer.future;
+                  onMapCreated: (ctl) async {
+                    controller.setGoogleMapController(ctl);
                   },
                 );
               },
@@ -74,8 +73,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                           controller.isDark ? Colors.grey[850] : Colors.white),
                   child: TextField(
                     style: TextStyle(
-                      color: controller.isDark ? Colors.white : Colors.black
-                    ),
+                        color: controller.isDark ? Colors.white : Colors.black),
                     decoration: InputDecoration(
                       hintText: 'Enter Address',
                       hintStyle: TextStyle(
