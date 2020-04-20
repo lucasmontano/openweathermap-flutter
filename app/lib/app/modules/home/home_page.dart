@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'components/button_custom_clipper/button_custom_clipper.dart';
 import 'home_controller.dart';
 import 'widgets/weather_info_bottom_sheet/weather_info_bottom_sheet_widget.dart';
 
@@ -136,14 +137,46 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       ),
       floatingActionButton: Observer(
         builder: (_) {
-          return FloatingActionButton(
-            onPressed: () {
-              controller.setIsExploring(!controller.isExploring);
-            },
-            backgroundColor: controller.isDark ? Colors.grey[850] : Colors.blue,
-            child: controller.isExploring
-                ? Icon(Icons.add_location)
-                : Icon(Icons.map),
+          return ClipPath(
+            clipper: ButtonCustomClipper(),
+            child: Container(
+              height: 55,
+              width: MediaQuery.of(context).size.width / 2,
+              child: RaisedButton(
+                onPressed: () {
+                  controller.setIsExploring(!controller.isExploring);
+                },
+                color:
+                    controller.isExploring ? Colors.grey[850] : Colors.red[900],
+                child: controller.isExploring
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Icon(
+                            Icons.location_searching,
+                            color: Colors.white,
+                          ),
+                          Text(
+                            'EXPLORE LOCATIONS',
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Icon(
+                            Icons.bookmark_border,
+                            color: Colors.white,
+                          ),
+                          Text(
+                            'SHOW BOOKMARKS',
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+              ),
+            ),
           );
         },
       ),
